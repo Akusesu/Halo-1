@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Halo 1 PC
+Comment=Start the fight.
+Exec=halo1pc %U
+Icon=net.bungie.Halo1pc
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-ms-shortcut;
+Categories=Game;FPS;
+Keywords=Halo
