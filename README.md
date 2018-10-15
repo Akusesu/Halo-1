@@ -13,7 +13,7 @@ Install required Winepak packages :
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --if-not-exists winepak https://dl.winepak.org/repo/winepak.flatpakrepo
 flatpak install winepak org.winepak.Platform//3.0
-flatpak install winepak org.winepak.sdk//3.0
+flatpak install winepak org.winepak.Sdk//3.0
 ```
 Then build and install it
 ```
