@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Halo 1 PC
+Name=Halo 1 CE
 Comment=Start the fight.
 Exec=halo1pc %U
-Icon=net.bungie.Halo1pc
+Icon=net.bungie.Halo1ce
 StartupNotify=true
 Terminal=false
 Type=Application
