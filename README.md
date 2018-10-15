@@ -4,7 +4,7 @@ The goal is to make Halo 1 versions available on Linux through wine and flatpaks
 
 # Halo custom edition
 
-Put the files in the build directory :
+Put the files in net.bungie.Halo1ce :
 - halocesetup_en_1.00.exe
 - haloce-patch-1.0.10.exe
 
