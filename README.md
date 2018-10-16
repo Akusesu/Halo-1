@@ -43,7 +43,7 @@ flatpak-builder --force-clean --repo test builds net.bungie.Halo1pc.yml --instal
 
 ## Mods
 
-### Chimera
+### [Chimera](https://opencarnage.net/index.php?/topic/6916-chimera-build-49/)
 What version : Only Halo custom edition
 
 Compatible with : HAC2 and OpenSauce
