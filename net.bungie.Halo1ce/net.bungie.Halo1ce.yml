@@ -78,11 +78,17 @@ modules:
           - echo "Installing mfc42"
           - winetricks mfc42
           -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
           - echo "Installing application..."
           - wine "/app/bin/halocesetup_en_1.00.exe"
           -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
           - echo "Installing update..."
           - wine "/app/bin/haloce-patch-1.0.10.exe"
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
           -
           - echo "Installer finished"
       - type: script
