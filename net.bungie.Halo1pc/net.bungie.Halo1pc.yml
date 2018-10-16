@@ -1,0 +1,119 @@
+app-id: net.bungie.Halo1pc
+branch: stable
+
+runtime: org.winepak.Platform
+runtime-version: 3.0
+sdk: org.winepak.Sdk
+
+command: halo1pc
+
+add-extensions:
+  org.winepak.Platform.Compat32:
+    directory: lib/32bit
+    version: 3.0
+    add-ld-path: lib
+    no-autodownload: false
+
+  org.winepak.Platform.Wine.Compat32:
+    directory: lib/wine-32bit
+    version: 3.8-staging
+    add-ld-path: lib
+    no-autodownload: false
+
+tags:
+  - proprietary
+
+finish-args:
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=ipc
+  - --share=network
+  - --device=dri
+  - --filesystem=xdg-documents
+  - --env=GPU_MAX_HEAP_SIZE="100"
+  - --env=GPU_MAX_ALLOC_PERCENT="100"
+  - --env=MESA_GLTHREAD=true
+  - --env=__GL_THREADED_OPTIMIZATIONS=1
+
+modules:
+  - name: setup-compat32
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/32bit
+      - ln -s /app/lib/32bit/lib/ld-linux.so.2 /app/lib/ld-linux.so.2
+
+  - name: setup-wine-compat32
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/wine-32bit
+
+  - name: halo1pc-setup
+    buildsystem: simple
+    build-commands:
+      - install -d /app/bin/
+      - cp -r halo /app/bin/
+      - install Halo1pc-Installer /app/bin/
+      - install halo1pc /app/bin/
+      - install -Dm644 halopc-patch-1.0.10.exe /app/bin/halopc-patch-1.0.10.exe
+      - install -Dm644 net.bungie.Halo1pc.appdata.xml /app/share/appdata/net.bungie.Halo1pc.appdata.xml
+      - install -Dm644 net.bungie.Halo1pc.desktop /app/share/applications/net.bungie.Halo1pc.desktop
+    sources:
+      - type: script
+        dest-filename: Halo1pc-Installer
+        commands:
+          - if [ -z "$WINEPREFIX" ] ; then
+          - '    echo "No wine prefix set or is empty, abort."'
+          - '    exit 1'
+          - fi
+          -
+          - if [ -e "${WINEPREFIX}/dosdevices/c:/Program Files/Microsoft Games" ] ; then
+          - '    echo "This prefix already has an exisiting ''Halo1pc'' install at ${WINEPREFIX}"'
+          - '    echo "In order to install ''Halo1pc'' you must move or delete the current prefix."'
+          - '    exit 1'
+          - fi
+          -
+          - echo "Setting-up wine prefix..."
+          - wineboot
+          -
+          - echo "Installing mfc42"
+          - winetricks mfc42
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing application..."
+          - wine "/app/bin/halo/Setup.Exe"
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing update..."
+          - wine "/app/bin/halopc-patch-1.0.10.exe"
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installer finished"
+      - type: script
+        dest-filename: halo1pc
+        commands:
+          - cd '/var/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo'
+          - touch config.txt
+          - export WINEARCH=win32
+          -
+          - if ! [ -e "${WINEPREFIX}/dosdevices/c:/Program Files/Microsoft Games" ] ; then
+          - '    source /app/bin/Halo1pc-Installer'
+          - '    if [[ $? != 0 ]] ; then'
+          - '        echo "Installation failed, abort."'
+          - '        exit 1'
+          - '    fi'
+          - fi
+          -
+          - wine "C:/Program Files/Microsoft Games/Halo/halo.exe" "$@"
+      - type: file
+        path: net.bungie.Halo1pc.appdata.xml
+      - type: file
+        path: net.bungie.Halo1pc.desktop
+      - type: dir
+        path: ./halo-setup
+        dest: halo
+      - type: file
+        path: halopc-patch-1.0.10.exe
+
