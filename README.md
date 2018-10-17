@@ -4,7 +4,7 @@ The goal is to make Halo 1 versions available on Linux through wine and flatpaks
 
 # Halo custom edition
 
-Put the files in net.bungie.Halo1ce :
+Put the files in net.bungie.HCE :
 - halocesetup_en_1.00.exe
 - haloce-patch-1.0.10.exe
 
@@ -17,7 +17,7 @@ flatpak install winepak org.winepak.Sdk//3.0
 ```
 Then build and install it
 ```
-flatpak-builder --force-clean --repo test builds net.bungie.Halo1ce.yml --install
+flatpak-builder --force-clean builds net.bungie.HCE.yml --install
 ```
 
 # Halo combat evolved
@@ -38,7 +38,7 @@ flatpak install winepak org.winepak.Sdk//3.0
 ```
 Then build and install it
 ```
-flatpak-builder --force-clean --repo test builds net.bungie.Halo1pc.yml --install
+flatpak-builder --force-clean builds net.bungie.HPC.yml --install
 ```
 
 ## Mods
@@ -50,3 +50,12 @@ Compatible with : HAC2 and OpenSauce
 
 Installation :
 Put the `chimera.dll` in `~/.var/app/net.bungie.Halo1ce/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Custom Edition/controls`
+
+### [HAC2](http://blog.haloanticheat.com/)
+
+What version : Only Halo custom edition
+
+Compatible with : HAC2 and OpenSauce
+
+Installation :
+Put the `loader.dll` in `~/.var/app/net.bungie.Halo1ce/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Custom Edition/controls`
