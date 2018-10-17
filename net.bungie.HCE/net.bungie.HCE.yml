@@ -1,11 +1,11 @@
-app-id: net.bungie.Halo1ce
+app-id: net.bungie.HCE
 branch: stable
 
 runtime: org.winepak.Platform
 runtime-version: 3.0
 sdk: org.winepak.Sdk
 
-command: halo1ce
+command: hce
 
 add-extensions:
   org.winepak.Platform.Compat32:
@@ -29,7 +29,6 @@ finish-args:
   - --share=ipc
   - --share=network
   - --device=dri
-  - --filesystem=xdg-documents
   - --env=GPU_MAX_HEAP_SIZE="100"
   - --env=GPU_MAX_ALLOC_PERCENT="100"
   - --env=MESA_GLTHREAD=true
@@ -47,19 +46,19 @@ modules:
     build-commands:
       - mkdir -p /app/lib/wine-32bit
 
-  - name: halo1ce-setup
+  - name: hce-setup
     buildsystem: simple
     build-commands:
       - install -d /app/bin
-      - install Halo1ce-Installer /app/bin/
-      - install halo1ce /app/bin
+      - install HCE-Installer /app/bin/
+      - install hce /app/bin
       - install -Dm644 halocesetup_en_1.00.exe /app/bin/halocesetup_en_1.00.exe
       - install -Dm644 haloce-patch-1.0.10.exe /app/bin/haloce-patch-1.0.10.exe
-      - install -Dm644 net.bungie.Halo1ce.appdata.xml /app/share/appdata/net.bungie.Halo1ce.appdata.xml
-      - install -Dm644 net.bungie.Halo1ce.desktop /app/share/applications/net.bungie.Halo1ce.desktop
+      - install -Dm644 net.bungie.HCE.appdata.xml /app/share/appdata/net.bungie.HCE.appdata.xml
+      - install -Dm644 net.bungie.HCE.desktop /app/share/applications/net.bungie.HCE.desktop
     sources:
       - type: script
-        dest-filename: Halo1ce-Installer
+        dest-filename: HCE-Installer
         commands:
           - if [ -z "$WINEPREFIX" ] ; then
           - '    echo "No wine prefix set or is empty, abort."'
@@ -80,6 +79,11 @@ modules:
           -
           - while ps -e | grep -q wine; do sleep 1; done
           -
+          - echo "Installing VC++ 2010"
+          - winetricks vcrun2010
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
           - echo "Installing application..."
           - wine "/app/bin/halocesetup_en_1.00.exe"
           -
@@ -90,27 +94,36 @@ modules:
           -
           - while ps -e | grep -q wine; do sleep 1; done
           -
+          - mkdir -p $XDG_DATA_HOME/profiles
+          - '[ -d ~/Documents ] && rmdir ~/Documents ||:'
+          - ln -sf $XDG_DATA_HOME/profiles ~/Documents
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
           - echo "Installer finished"
       - type: script
-        dest-filename: halo1ce
+        dest-filename: hce
         commands:
-          - cd '/var/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Custom Edition'
-          - touch config.txt
           - export WINEARCH=win32
           -
           - if ! [ -e "${WINEPREFIX}/dosdevices/c:/Program Files/Microsoft Games" ] ; then
-          - '    source /app/bin/Halo1ce-Installer'
+          - '    source /app/bin/HCE-Installer'
           - '    if [[ $? != 0 ]] ; then'
           - '        echo "Installation failed, abort."'
           - '        exit 1'
           - '    fi'
           - fi
           -
+          - cd '/var/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Custom Edition'
+          - touch config.txt
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
           - wine "C:/Program Files/Microsoft Games/Halo Custom Edition/haloce.exe" "$@"
       - type: file
-        path: net.bungie.Halo1ce.appdata.xml
+        path: net.bungie.HCE.appdata.xml
       - type: file
-        path: net.bungie.Halo1ce.desktop
+        path: net.bungie.HCE.desktop
       - type: file
         path: halocesetup_en_1.00.exe
       - type: file
