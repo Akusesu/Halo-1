@@ -52,6 +52,7 @@ modules:
       - install -d /app/bin
       - install HCE-Installer /app/bin/
       - install hce /app/bin
+      - install -Dm644 msxml.msi /app/bin/msxml.msi
       - install -Dm644 halocesetup_en_1.00.exe /app/bin/halocesetup_en_1.00.exe
       - install -Dm644 haloce-patch-1.0.10.exe /app/bin/haloce-patch-1.0.10.exe
       - install -Dm644 net.bungie.HCE.appdata.xml /app/share/appdata/net.bungie.HCE.appdata.xml
@@ -66,8 +67,8 @@ modules:
           - fi
           -
           - if [ -e "${WINEPREFIX}/dosdevices/c:/Program Files/Microsoft Games" ] ; then
-          - '    echo "This prefix already has an exisiting ''Halo1ce'' install at ${WINEPREFIX}"'
-          - '    echo "In order to install ''Halo1ce'' you must move or delete the current prefix."'
+          - '    echo "This prefix already has an exisiting ''HCE'' install at ${WINEPREFIX}"'
+          - '    echo "In order to install ''HCE'' you must move or delete the current prefix."'
           - '    exit 1'
           - fi
           -
@@ -81,6 +82,11 @@ modules:
           -
           - echo "Installing VC++ 2010"
           - winetricks vcrun2010
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing MSXML 4.0"
+          - wine msiexec /i "/app/bin/msxml.msi"
           -
           - while ps -e | grep -q wine; do sleep 1; done
           -
@@ -128,4 +134,7 @@ modules:
         path: halocesetup_en_1.00.exe
       - type: file
         path: haloce-patch-1.0.10.exe
+      - type: file
+        url: https://download.microsoft.com/download/9/6/5/9657c01e-107f-409c-baac-7d249561629c/msxml.msi
+        sha256: f51f79d6b2638dcc56205f233c1fa2029f09cb7397350f5e7549644eb5c2a249
 
