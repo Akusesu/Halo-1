@@ -24,6 +24,7 @@ tags:
   - proprietary
 
 finish-args:
+  - --allow=multiarch
   - --socket=x11
   - --socket=pulseaudio
   - --share=ipc
