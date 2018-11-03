@@ -101,9 +101,8 @@ modules:
           -
           - while ps -e | grep -q wine; do sleep 1; done
           -
-          - mkdir -p $XDG_DATA_HOME/profiles
-          - '[ -d ~/Documents ] && rmdir ~/Documents ||:'
-          - ln -sf $XDG_DATA_HOME/profiles ~/Documents
+          - rm "${WINEPREFIX}/dosdevices/c:/users/$USER/My Documents"
+          - mkdir -p "${WINEPREFIX}/dosdevices/c:/users/$USER/My Documents"
           -
           - while ps -e | grep -q wine; do sleep 1; done
           -
