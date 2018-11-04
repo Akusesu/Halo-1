@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>com.bungie.HCE.SPV3.desktop</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-proprietary</project_license>
+    <name>Halo 1 CE - SPV3</name>
+    <summary></summary>
+    <description>
+        <p>SPV3 is the culmination of a vision that was started over 10 years ago, to revamp the 
+        original  Halo campaign with features and ideas from later games, expanded fiction, and 
+        cut content originally envisioned for Halo CE. With a strong emphasis of preserving the 
+        addictive and tuned gameplay of the original, and a stellar Legendary difficulty, SPV3 
+        focuses extensively on retaining that Halo CE feel.</p>
+    </description>
+
+    <screenshots>
+        <screenshot type="default">
+            <image width="2560" height="1440">https://i1.wp.com/haloce3.com/maps/images/2016/6.25.16/spv3_5_full.jpg</image>
+        </screenshot>
+        <screenshot>
+            <image width="2560" height="1440">https://i2.wp.com/haloce3.com/maps/images/2016/6.25.16/spv3_3_full.jpg</image>
+        </screenshot>
+        <screenshot>
+            <image width="2560" height="1440">https://i2.wp.com/haloce3.com/maps/images/2016/6.25.16/spv3_6_full.jpg</image>
+        </screenshot>
+        <screenshot>
+            <image width="2560" height="1440">https://i2.wp.com/haloce3.com/maps/images/2017/8.19.17/1_full.jpg</image>
+        </screenshot>
+        <screenshot>
+            <image width="2560" height="1440">https://i0.wp.com/haloce3.com/maps/images/2017/8.19.17/2_full.jpg</image>
+        </screenshot>
+    </screenshots>
+
+    <project_group>Akusesu</project_group>
+    <developer_name>Gearbox Software and SPV3 Team</developer_name>
+
+    <url type="homepage">https://www.reddit.com/r/halospv3/</url>
+
+    <categories>
+        <category>Game</category>
+        <category>Sandbox</category>
+    </categories>
+
+    <requires>
+        <id version="0.11.4" compare="ge">org.freedesktop.Flatpak</id>
+        <memory>1024</memory>
+    </requires>
+
+    <recommends>
+        <id version="0.11.7" compare="ge">org.freedesktop.Flatpak</id>
+        <memory>2048</memory>
+    </recommends>
+
+    <releases>
+        <release date="2018-11-02" version="2018-11-02">
+            <description>
+                <ul>
+                    <li>Combat has been reimagined.</li>
+                </ul>
+            </description>
+        </release>
+    </releases>
+</component>

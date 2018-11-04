@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Halo 1 SPV3
+Comment=Reimagine the fight.
+Exec=hspv3 %U
+Icon=net.bungie.HCE.SPV3
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-ms-shortcut;
+Categories=Game;FPS;
+Keywords=Halo

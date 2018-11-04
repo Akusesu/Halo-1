@@ -1,0 +1,167 @@
+app-id: net.bungie.HCE.SPV3
+branch: stable
+
+runtime: org.winepak.Platform
+runtime-version: 3.0
+sdk: org.winepak.Sdk
+
+command: hspv3
+
+add-extensions:
+  org.winepak.Platform.Compat32:
+    directory: lib/32bit
+    version: 3.0
+    add-ld-path: lib
+    no-autodownload: false
+
+  org.winepak.Platform.Wine.Compat32:
+    directory: lib/wine-32bit
+    version: 3.10-staging
+    add-ld-path: lib
+    no-autodownload: false
+
+  org.winepak.Platform.Extension.d3dx9:
+    directory: lib/extension/d3dx9
+    version: 3.0
+    no-autodownload: false
+    
+tags:
+  - proprietary
+
+finish-args:
+  - --allow=multiarch
+  - --socket=x11
+  - --socket=pulseaudio
+  - --share=ipc
+  - --share=network
+  - --device=dri
+  - --env=GPU_MAX_HEAP_SIZE="100"
+  - --env=GPU_MAX_ALLOC_PERCENT="100"
+  - --env=MESA_GLTHREAD=true
+  - --env=__GL_THREADED_OPTIMIZATIONS=1
+
+modules:
+  - name: setup-compat32
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/32bit
+      - ln -s /app/lib/32bit/lib/ld-linux.so.2 /app/lib/ld-linux.so.2
+
+  - name: setup-wine-compat32
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/wine-32bit
+      
+  - name: setup
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/extension/d3dx9
+      
+  - name: hce-setup
+    buildsystem: simple
+    build-commands:
+      - install -d /app/bin
+      - install HSPV3-Installer /app/bin/
+      - install hspv3 /app/bin
+      - install -Dm644 NDP451-KB2858728-x86-x64-AllOS-ENU.exe /app/bin/NDP451-KB2858728-x86-x64-AllOS-ENU.exe
+      - install -Dm644 msxml.msi /app/bin/msxml.msi
+      - cp -r halo /app/bin/
+      - install -Dm644 net.bungie.HCE.SPV3.appdata.xml /app/share/appdata/net.bungie.HCE.SPV3.appdata.xml
+      - install -Dm644 net.bungie.HCE.SPV3.desktop /app/share/applications/net.bungie.HCE.SPV3.desktop
+    sources:
+      - type: script
+        dest-filename: HSPV3-Installer
+        commands:
+          - if [ -z "$WINEPREFIX" ] ; then
+          - '    echo "No wine prefix set or is empty, abort."'
+          - '    exit 1'
+          - fi
+          -
+          - if [ -e "${WINEPREFIX}/dosdevices/c:/Program Files/Microsoft Games" ] ; then
+          - '    echo "This prefix already has an exisiting ''HSPV3'' install at ${WINEPREFIX}"'
+          - '    echo "In order to install ''HSPV3'' you must move or delete the current prefix."'
+          - '    exit 1'
+          - fi
+          -
+          - echo "Setting-up wine prefix..."
+          - wineboot
+          -
+          - echo "Installing msxml3"
+          - winetricks -q msxml3
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing .NET 3.5 sp1"
+          - winetricks -q dotnet35sp1
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing .NET 4.0"
+          - winetricks -q dotnet40
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing .NET 4.5.1"
+          - winetricks win7
+          - wine "/app/bin/NDP451-KB2858728-x86-x64-AllOS-ENU.exe"
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing vb6run"
+          - winetricks vb6run
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing mfc42"
+          - winetricks mfc42
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installing application..."
+          - winetricks win7
+          - cp /app/bin/halo/SPV3.1.0f.exe "${WINEPREFIX}/dosdevices/c:/users/$USER/Downloads"
+          - cd "${WINEPREFIX}/dosdevices/c:/users/$USER/Downloads/"
+          - wine SPV3.1.0f.exe
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - rm "${WINEPREFIX}/dosdevices/c:/users/$USER/My Documents"
+          - mkdir -p "${WINEPREFIX}/dosdevices/c:/users/$USER/My Documents"
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - echo "Installer finished"
+      - type: script
+        dest-filename: hspv3
+        commands:
+          - export WINEARCH=win32
+          -
+          - if ! [ -e "${WINEPREFIX}/dosdevices/c:/Program Files/Microsoft Games" ] ; then
+          - '    source /app/bin/HSPV3-Installer'
+          - '    if [[ $? != 0 ]] ; then'
+          - '        echo "Installation failed, abort."'
+          - '        exit 1'
+          - '    fi'
+          - fi
+          -
+          - cd '/var/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Custom Edition'
+          - touch config.txt
+          -
+          - while ps -e | grep -q wine; do sleep 1; done
+          -
+          - wine "C:/Program Files/Microsoft Games/Halo Custom Edition/haloce.exe" "$@"
+      - type: file
+        path: net.bungie.HCE.SPV3.appdata.xml
+      - type: file
+        path: net.bungie.HCE.SPV3.desktop
+      - type: dir
+        path: ./SPV3.1.0f
+        dest: halo
+      - type: file
+        url: https://download.microsoft.com/download/9/6/5/9657c01e-107f-409c-baac-7d249561629c/msxml.msi
+        sha256: f51f79d6b2638dcc56205f233c1fa2029f09cb7397350f5e7549644eb5c2a249
+      - type: file
+        url: https://download.microsoft.com/download/1/6/7/167F0D79-9317-48AE-AEDB-17120579F8E2/NDP451-KB2858728-x86-x64-AllOS-ENU.exe
+        sha256: 5ded8628ce233a5afa8e0efc19ad34690f05e9bb492f2ed0413508546af890fe
+        
+
