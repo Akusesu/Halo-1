@@ -53,9 +53,12 @@ Put the `chimera.dll` in `~/.var/app/net.bungie.Halo1ce/data/wine/dosdevices/c:/
 
 ### [HAC2](http://blog.haloanticheat.com/)
 
-What version : Only Halo custom edition
+What version : Custom edition and Retail (PC)
 
-Compatible with : HAC2 and OpenSauce
+Compatible with : Chimera and OpenSauce (I think it needs something else)
 
-Installation :
+Installation for Halo Custom editon :
 Put the `loader.dll` in `~/.var/app/net.bungie.Halo1ce/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Custom Edition/controls`
+
+Installation for Halo Retail (PC) :
+Put the `loader.dll` in `~/.var/app/net.bungie.Halo1ce/data/wine/dosdevices/c:/Program Files/Microsoft Games/Halo Combat Evolved/controls`
